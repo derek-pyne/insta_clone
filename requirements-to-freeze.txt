@@ -1,0 +1,13 @@
+pandas
+numpy
+jupyter
+jupyterlab
+selenium
+beautifulsoup4
+matplotlib
+requests
+flask
+flask_sqlalchemy
+gunicorn
+psycopg2
+Flask-Migrate
