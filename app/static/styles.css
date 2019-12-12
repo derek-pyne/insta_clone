@@ -1,7 +1,51 @@
-.profile-thumbnail {
-    position: absolute;
+img {
+    height: 100%;
+    width: 100%;
 }
-.profile-header {
-    min-height: 260px;
-    margin-left: 280px;
+
+.contain {
+    object-fit: contain;
+}
+
+.top-rounded {
+    border-radius: 5px 5px 0 0;
+}
+
+.influencer-posts {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    align-items: center;
+
+}
+
+.post {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    width: 250px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.post-image {
+    height: 250px;
+}
+
+.post-under-image {
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+}
+
+.post-author {
+    font-weight: bold;
+}
+
+.post-alt-text {
+
+}
+
+.post-caption {
+
 }
