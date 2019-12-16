@@ -1,3 +1,6 @@
 .direnv
 .ipynb_checkpoints
 .idea
+*.sqlite
+.DS_Store
+__pycache__/

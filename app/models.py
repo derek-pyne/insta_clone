@@ -1,20 +1,22 @@
 from . import db
 
 
-class InfluencerPost(db.Model):
+class Post(db.Model):
 
-    __tablename__ = 'influencer_post'
+    __tablename__ = 'post'
     id = db.Column(db.String(), primary_key=True)
     influencer = db.Column(db.String())
-    img_insta_url = db.Column(db.String())
-    caption = db.Column(db.String())
+    img_file = db.Column(db.String())
+    influencer_caption = db.Column(db.String())
     alt_text = db.Column(db.String())
 
-    def __init__(self, id, influencer, img_insta_url, caption, alt_text) -> None:
+    caption = db.Column(db.String())
+
+    def __init__(self, id, influencer, img_file, influencer_caption, alt_text) -> None:
         self.id = id
         self.influencer = influencer
-        self.img_insta_url = img_insta_url
-        self.caption = caption
+        self.influencer_caption = influencer_caption
+        self.img_file = img_file
         self.alt_text = alt_text
 
     def __repr__(self) -> str:

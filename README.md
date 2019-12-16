@@ -20,11 +20,11 @@ This project looks to automate the third category.
 Some of the influencers in this category are curated/reposting content.
 This presents and opportunity to automate since this content is not
 tied to any specific person/brand (ie. it wouldn't look weird posted
- by someone else).
+by someone else).
  
- ### Automation Approach
- We will create meta accounts that are aggregates of these aggregating 
- accounts.
+### Automation Approach
+We will create meta accounts that are aggregates of these aggregating 
+accounts.
 
 ## Project Plan
 - Tool to periodically scrap posts from aggregating influencers

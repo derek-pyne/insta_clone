@@ -19,6 +19,16 @@ img {
 
 }
 
+.editable-post {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 700px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    margin: 10px;
+}
+
 .post {
     display: flex;
     flex-direction: column;
@@ -43,7 +53,7 @@ img {
 }
 
 .post-alt-text {
-
+    font-style: italic;
 }
 
 .post-caption {
