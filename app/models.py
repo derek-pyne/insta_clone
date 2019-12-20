@@ -1,8 +1,7 @@
-from . import db
+from . import db, ma
 
 
 class Post(db.Model):
-
     __tablename__ = 'post'
     id = db.Column(db.String(), primary_key=True)
     influencer = db.Column(db.String())
@@ -21,3 +20,8 @@ class Post(db.Model):
 
     def __repr__(self) -> str:
         return '<id {}>'.format(self.id)
+
+
+class PostSchema(ma.ModelSchema):
+    class Meta:
+        model = Post

@@ -14,3 +14,5 @@ flask_login
 flask_bootstrap
 flask_migrate
 flask_wtf
+marshmallow-sqlalchemy
+flask-marshmallow
