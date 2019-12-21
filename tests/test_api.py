@@ -32,7 +32,7 @@ class APITestCase(unittest.TestCase):
         json_response = json.loads(response.get_data(as_text=True))
         self.assertEqual(json_response['error'], 'not found')
 
-    def test_create_and_get_post(self):
+    def test_create_edit_and_get_post(self):
         post = {
             'id': '123',
             'influencer': 'cool_influencer',
@@ -54,4 +54,16 @@ class APITestCase(unittest.TestCase):
             '/api/v1/posts/' + post['id'],
             headers=self.get_api_headers())
         self.assertEqual(get_response.status_code, 200)
+        saved_post = get_response.json
         self.assertEqual(get_response.json, post_response.json)
+
+        patch_change = {
+            'caption': 'Epic new caption'
+        }
+        patch_response = self.client.patch(
+            '/api/v1/posts/' + post['id'],
+            headers=self.get_api_headers(),
+            data=json.dumps(patch_change))
+        self.assertEqual(patch_response.status_code, 200)
+        saved_post.update(patch_change)
+        self.assertEqual(patch_response.json, saved_post)
