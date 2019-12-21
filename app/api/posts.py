@@ -1,4 +1,7 @@
+import marshmallow
 from flask import jsonify, request, g, url_for, current_app
+
+from app.exceptions import ValidationError
 from .. import db
 from ..models import Post, PostSchema
 from . import api
@@ -14,7 +17,13 @@ def get_post(id):
 
 @api.route('/posts/', methods=['POST'])
 def new_post():
-    post = post_schema.load(request.json)
+    try:
+        post = post_schema.load(request.json)
+    except Exception as err:
+        raise ValidationError(str(err))
+
+    if Post.query.filter_by(instagram_post_hash=post.instagram_post_hash).first():
+        raise ValidationError('instagram_post_hash already registered.')
     db.session.add(post)
     db.session.commit()
     return jsonify(post_schema.dump(post)), 201

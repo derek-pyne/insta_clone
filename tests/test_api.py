@@ -34,7 +34,7 @@ class APITestCase(unittest.TestCase):
 
     def test_create_edit_and_get_post(self):
         post = {
-            'id': '123',
+            'instagram_post_hash': '123',
             'influencer': 'cool_influencer',
             'img_file': 'pic.png',
             'influencer_caption': 'I am cool',
@@ -46,12 +46,12 @@ class APITestCase(unittest.TestCase):
             data=json.dumps(post))
         self.assertEqual(post_response.status_code, 201)
         self.assertDictEqual(
-            {k: v for k, v in post_response.json.items() if k not in ['caption']},
-            {k: v for k, v in post.items() if k not in ['caption']}
+            {k: v for k, v in post_response.json.items() if k not in ['id', 'caption']},
+            {k: v for k, v in post.items() if k not in ['id', 'caption']}
         )
 
         get_response = self.client.get(
-            '/api/v1/posts/' + post['id'],
+            '/api/v1/posts/' + str(post_response.json['id']),
             headers=self.get_api_headers())
         self.assertEqual(get_response.status_code, 200)
         saved_post = get_response.json
@@ -61,9 +61,50 @@ class APITestCase(unittest.TestCase):
             'caption': 'Epic new caption'
         }
         patch_response = self.client.patch(
-            '/api/v1/posts/' + post['id'],
+            '/api/v1/posts/' + str(post_response.json['id']),
             headers=self.get_api_headers(),
             data=json.dumps(patch_change))
         self.assertEqual(patch_response.status_code, 200)
         saved_post.update(patch_change)
         self.assertEqual(patch_response.json, saved_post)
+
+    def test_create_post_with_id_should_400(self):
+        post = {
+            'id': '123',
+            'influencer': 'cool_influencer',
+            'img_file': 'pic.png',
+            'influencer_caption': 'I am cool',
+            'alt_text': 'Picture of rock star',
+        }
+        post_response = self.client.post(
+            '/api/v1/posts/',
+            headers=self.get_api_headers(),
+            data=json.dumps(post))
+        self.assertEqual(post_response.status_code, 400)
+
+    def test_create_post_with_existing_post_should_400(self):
+        post = {
+            'instagram_post_hash': '123',
+            'influencer': 'cool_influencer',
+            'img_file': 'pic.png',
+            'influencer_caption': 'I am cool',
+            'alt_text': 'Picture of rock star',
+        }
+        post_response = self.client.post(
+            '/api/v1/posts/',
+            headers=self.get_api_headers(),
+            data=json.dumps(post))
+        self.assertEqual(post_response.status_code, 201)
+
+        post = {
+            'instagram_post_hash': '123',
+            'influencer': 'cool_influencer',
+            'img_file': 'pic.png',
+            'influencer_caption': 'I am cool',
+            'alt_text': 'Picture of rock star',
+        }
+        post_response = self.client.post(
+            '/api/v1/posts/',
+            headers=self.get_api_headers(),
+            data=json.dumps(post))
+        self.assertEqual(post_response.status_code, 400)
