@@ -12,6 +12,9 @@ class Post(db.Model):
 
     caption = db.Column(db.String())
 
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+
     def __init__(self, instagram_post_hash, influencer, img_file, influencer_caption, alt_text) -> None:
         self.instagram_post_hash = instagram_post_hash
         self.influencer = influencer

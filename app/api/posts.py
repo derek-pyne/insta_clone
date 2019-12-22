@@ -9,7 +9,7 @@ from . import api
 post_schema = PostSchema(session=db.session)
 
 
-@api.route('/posts/<string:id>')
+@api.route('/posts/<int:id>')
 def get_post(id):
     post = Post.query.get_or_404(id)
     return jsonify(post_schema.dump(post))
@@ -29,11 +29,14 @@ def new_post():
     return jsonify(post_schema.dump(post)), 201
 
 
-@api.route('/posts/<string:id>', methods=['PATCH'])
+@api.route('/posts/<int:id>', methods=['PATCH'])
 def edit_post(id):
     post = Post.query.get_or_404(id)
-    for key, value in request.json.items():
-        setattr(post, key, value)
+    try:
+        for key, value in request.json.items():
+            setattr(post, key, value)
+    except Exception as err:
+        raise ValidationError(str(err))
     db.session.add(post)
     db.session.commit()
     return jsonify(post_schema.dump(post))
