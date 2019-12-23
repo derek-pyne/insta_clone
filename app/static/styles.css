@@ -21,7 +21,7 @@ img {
 
 .editable-post {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
     width: 700px;
     border: 1px solid lightgray;
@@ -48,14 +48,18 @@ img {
     margin: 5px;
 }
 
-.post-author {
+.post-caption {
+
+}
+
+.post-metadata {
+    margin: 20px;
+}
+
+.post-metadata-field-title {
     font-weight: bold;
 }
 
-.post-alt-text {
-    font-style: italic;
-}
-
-.post-caption {
+.post-metadata-field-value {
 
 }
