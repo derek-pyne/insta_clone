@@ -61,5 +61,6 @@ img {
 }
 
 .post-metadata-field-value {
+    min-height: 20px    ;
 
 }

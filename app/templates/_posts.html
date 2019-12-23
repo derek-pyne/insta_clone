@@ -1,16 +1,8 @@
+{% import "_macros.html" as macros %}
 <ul class="influencer-posts">
     {% for post in posts %}
         <li class="editable-post">
-            <div class="post">
-                <div class="post-image">
-                    <img class="contain top-rounded"
-                         src="static/{{ post.img_file }}"
-                         alt="{{ post.alt_text }}">
-                </div>
-                <div class="post-under-image">
-                    <div class="post-caption">{{ post.influencer_caption }}</div>
-                </div>
-            </div>
+            {{ macros.post_preview(post) }}
             <div class="post-metadata">
                 <div class="post-metadata-field-title">Influencer:</div>
                 <div class="post-metadata-field-value">{{ post.influencer }}</div>
@@ -20,7 +12,7 @@
                 <div class="post-metadata-field-value">{{ post.caption }}</div>
                 <div class="post-metadata-field-title">Image Alt Text:</div>
                 <div class="post-metadata-field-value">{{ post.alt_text }}</div>
-                <a class="btn btn-primary" href="{{ url_for('.edit', id=post.id) }}">Edit</a>
+                <a class="btn btn-primary" href="{{ url_for('.post', id=post.id) }}">Edit</a>
             </div>
         </li>
     {% endfor %}

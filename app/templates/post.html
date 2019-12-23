@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
 
-{% block title %}Flasky - Edit Post{% endblock %}
+{% block title %}Insta Clone - Post{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Edit Post</h1>
+    <h1>Post</h1>
 </div>
 <div>
+    {{ macros.post_preview(post) }}
     {{ wtf.quick_form(form) }}
 </div>
 {% endblock %}

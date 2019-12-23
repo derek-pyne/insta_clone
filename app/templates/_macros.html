@@ -1,0 +1,12 @@
+{% macro post_preview(post) %}
+    <div class="post">
+        <div class="post-image">
+            <img class="contain top-rounded"
+                 src="{{ url_for('static', filename=post.img_file) }}"
+                 alt="{{ post.alt_text }}">
+        </div>
+        <div class="post-under-image">
+            <div class="post-caption">{{ post.influencer_caption }}</div>
+        </div>
+    </div>
+{% endmacro %}
