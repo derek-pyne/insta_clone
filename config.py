@@ -15,12 +15,14 @@ class Config:
 
 
 class DevelopmentConfig(Config):
+    BOOTSTRAP_SERVE_LOCAL = True
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
                               'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 
 
 class TestingConfig(Config):
+    BOOTSTRAP_SERVE_LOCAL = True
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
                               'sqlite://'
@@ -57,8 +59,8 @@ class HerokuConfig(ProductionConfig):
 
 config = {
     'development': DevelopmentConfig,
-    'testing': TestingConfig,
-    'production': ProductionConfig,
-    'heroku': HerokuConfig,
-    'default': DevelopmentConfig
+    'testing':     TestingConfig,
+    'production':  ProductionConfig,
+    'heroku':      HerokuConfig,
+    'default':     DevelopmentConfig
 }
