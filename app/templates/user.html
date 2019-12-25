@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Insta Clone - {{ user.username }}{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <div class="profile-header">
+        <h1>{{ user.username }}</h1>
+        {% if user.name or user.location %}
+        <p>
+            {% if user.name %}{{ user.name }}<br>{% endif %}
+        </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
