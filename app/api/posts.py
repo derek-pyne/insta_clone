@@ -9,6 +9,11 @@ from . import api
 post_schema = PostSchema(session=db.session)
 
 
+@api.route('/posts/')
+def get_posts():
+    return 'hello'
+
+
 @api.route('/posts/<int:id>')
 def get_post(id):
     post = Post.query.get_or_404(id)
