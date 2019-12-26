@@ -163,3 +163,26 @@ class APITestCase(unittest.TestCase):
             headers=self.example_user_auth_headers(),
             data=json.dumps(self.sample_post_request))
         self.assertEqual(post_response.status_code, 400)
+
+    def test_get_posts(self):
+        self.insert_example_user()
+
+        post_response = self.client.post(
+            '/api/v1/posts/',
+            headers=self.example_user_auth_headers(),
+            data=json.dumps(self.sample_post_request))
+        self.assertEqual(post_response.status_code, 201)
+
+        second_post = self.sample_post_request.copy()
+        second_post['instagram_post_hash'] = '456'
+        post_response = self.client.post(
+            '/api/v1/posts/',
+            headers=self.example_user_auth_headers(),
+            data=json.dumps(second_post))
+        self.assertEqual(post_response.status_code, 201)
+
+        get_response = self.client.get(
+            '/api/v1/posts/',
+            headers=self.example_user_auth_headers())
+        self.assertEqual(get_response.status_code, 200)
+        self.assertEqual(len(get_response.json['posts']), 2)

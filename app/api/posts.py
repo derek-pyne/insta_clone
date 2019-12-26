@@ -11,7 +11,10 @@ post_schema = PostSchema(session=db.session)
 
 @api.route('/posts/')
 def get_posts():
-    return 'hello'
+    posts = Post.query.all()
+    return jsonify({
+        'posts': [post_schema.dump(p) for p in posts],
+    })
 
 
 @api.route('/posts/<int:id>')
