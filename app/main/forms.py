@@ -15,3 +15,11 @@ class EditPostForm(FlaskForm):
         super(EditPostForm, self).__init__(*args, **kwargs)
         read_only(self.influencer)
         read_only(self.influencer_caption)
+
+
+class EditManagedInstagramAccountForm(FlaskForm):
+    handle = StringField('Handle:', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+    def __init__(self, *args, **kwargs):
+        super(EditManagedInstagramAccountForm, self).__init__(*args, **kwargs)

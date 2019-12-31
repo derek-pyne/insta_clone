@@ -4,14 +4,14 @@
         <li class="editable-post">
             {{ macros.post_preview(post) }}
             <div class="post-metadata">
-                <div class="post-metadata-field-title">Influencer:</div>
-                <div class="post-metadata-field-value">{{ post.influencer }}</div>
-                <div class="post-metadata-field-title">Influencer Caption:</div>
-                <div class="post-metadata-field-value">{{ post.influencer_caption }}</div>
-                <div class="post-metadata-field-title">Caption:</div>
-                <div class="post-metadata-field-value">{{ post.caption }}</div>
-                <div class="post-metadata-field-title">Image Alt Text:</div>
-                <div class="post-metadata-field-value">{{ post.alt_text }}</div>
+                <div class="field-title">Influencer:</div>
+                <div class="field-value">{{ post.influencer }}</div>
+                <div class="field-title">Influencer Caption:</div>
+                <div class="field-value">{{ post.influencer_caption }}</div>
+                <div class="field-title">Caption:</div>
+                <div class="field-value">{{ post.caption }}</div>
+                <div class="field-title">Image Alt Text:</div>
+                <div class="field-value">{{ post.alt_text }}</div>
                 <a class="btn btn-primary" href="{{ url_for('.post', id=post.id) }}">Edit</a>
             </div>
         </li>

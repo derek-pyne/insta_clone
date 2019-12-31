@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Managed Instagram Account Feed{% endblock %}
+
+{% block page_content %}
+    <div class="page-header">
+        <h1>Managed Instagram Account</h1>
+    </div>
+    <div>
+        {{ macros.managed_instagram_account_preview(managed_instagram_account) }}
+        <h2>Reposts</h2>
+        {% include '_posts.html' %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+{% endblock %}

@@ -56,11 +56,10 @@ img {
     margin: 20px;
 }
 
-.post-metadata-field-title {
+.field-title {
     font-weight: bold;
 }
 
-.post-metadata-field-value {
+.field-value {
     min-height: 20px    ;
-
 }

@@ -6,7 +6,12 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from . import db, ma, login_manager
 
 
-class User(UserMixin, db.Model):
+class AuditableMixin:
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
+
+
+class User(AuditableMixin, UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     email = db.Column(db.String(), unique=True, index=True)
@@ -112,8 +117,18 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class Post(db.Model):
-    __tablename__ = 'post'
+reposts = db.Table('reposts',
+                   db.Column('post_id',
+                             db.Integer,
+                             db.ForeignKey('posts.id')),
+                   db.Column('managed_instagram_account_id',
+                             db.Integer,
+                             db.ForeignKey('managed_instagram_accounts.id'))
+                   )
+
+
+class Post(AuditableMixin, db.Model):
+    __tablename__ = 'posts'
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     influencer = db.Column(db.String())
     img_file = db.Column(db.String())
@@ -123,10 +138,8 @@ class Post(db.Model):
 
     caption = db.Column(db.String())
 
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
-    updated_at = db.Column(db.DateTime, server_default=db.func.now(), server_onupdate=db.func.now())
-
-    def __init__(self, instagram_post_hash, influencer, img_file, influencer_caption, alt_text) -> None:
+    def __init__(self, instagram_post_hash: str, influencer: str, img_file: str, influencer_caption: str,
+                 alt_text: str) -> None:
         self.instagram_post_hash = instagram_post_hash
         self.influencer = influencer
         self.influencer_caption = influencer_caption
@@ -140,3 +153,29 @@ class Post(db.Model):
 class PostSchema(ma.ModelSchema):
     class Meta:
         model = Post
+
+    managed_instagram_accounts = ma.List(ma.Nested('ManagedInstagramAccountSchema', exclude=('posts',)))
+
+
+class ManagedInstagramAccount(AuditableMixin, db.Model):
+    __tablename__ = 'managed_instagram_accounts'
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    handle = db.Column(db.String(), unique=True)
+
+    posts = db.relationship('Post',
+                            secondary=reposts,
+                            backref=db.backref('managed_instagram_accounts', lazy='dynamic'),
+                            lazy='dynamic')
+
+    def __init__(self, handle: str) -> None:
+        self.handle = handle
+
+    def __repr__(self) -> str:
+        return '<id {}, handle {}>'.format(self.id, self.handle)
+
+
+class ManagedInstagramAccountSchema(ma.ModelSchema):
+    class Meta:
+        model = ManagedInstagramAccount
+
+    posts = ma.List(ma.Nested(PostSchema, exclude=('managed_instagram_accounts',)))

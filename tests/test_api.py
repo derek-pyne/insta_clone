@@ -14,6 +14,9 @@ class APITestCase(unittest.TestCase):
         'influencer_caption':  'I am cool',
         'alt_text':            'Picture of rock star',
     }
+    sample_managed_instagram_account_request = {
+        'handle': 'epic_rock_star',
+    }
 
     def setUp(self):
         self.app = create_app('testing')
@@ -149,7 +152,7 @@ class APITestCase(unittest.TestCase):
             data=json.dumps(post))
         self.assertEqual(post_response.status_code, 400)
 
-    def test_create_post_with_existing_post_should_400(self):
+    def test_create_post_with_existing_should_400(self):
         self.insert_example_user()
 
         post_response = self.client.post(
@@ -186,3 +189,85 @@ class APITestCase(unittest.TestCase):
             headers=self.example_user_auth_headers())
         self.assertEqual(get_response.status_code, 200)
         self.assertEqual(len(get_response.json['posts']), 2)
+
+    def test_create_edit_and_get_managed_instagram_account(self):
+        self.insert_example_user()
+
+        post_response = self.client.post(
+            '/api/v1/managed_instagram_accounts/',
+            headers=self.example_user_auth_headers(),
+            data=json.dumps(self.sample_managed_instagram_account_request))
+        self.assertEqual(post_response.status_code, 201)
+        self.assertDictEqual(
+            {k: v for k, v in post_response.json.items() if k not in ['id', 'created_at', 'updated_at', 'posts']},
+            {k: v for k, v in self.sample_managed_instagram_account_request.items() if
+             k not in ['id', 'created_at', 'updated_at']}
+        )
+
+        get_response = self.client.get(
+            '/api/v1/managed_instagram_accounts/' + str(post_response.json['id']),
+            headers=self.example_user_auth_headers())
+        self.assertEqual(get_response.status_code, 200)
+        saved_managed_instagram_account = get_response.json
+        self.assertEqual(get_response.json, post_response.json)
+
+        patch_change = {
+            'handle': 'epic-new-handle'
+        }
+        patch_response = self.client.patch(
+            '/api/v1/managed_instagram_accounts/' + str(post_response.json['id']),
+            headers=self.example_user_auth_headers(),
+            data=json.dumps(patch_change))
+        self.assertEqual(patch_response.status_code, 200)
+        saved_managed_instagram_account.update(patch_change)
+        self.assertEqual(patch_response.json, saved_managed_instagram_account)
+
+    def test_create_managed_instagram_account_with_id_should_400(self):
+        self.insert_example_user()
+        managed_instagram_account = {
+            'id':     '123',
+            'handle': 'cool_influencer',
+        }
+        post_response = self.client.post(
+            '/api/v1/managed_instagram_accounts/',
+            headers=self.example_user_auth_headers(),
+            data=json.dumps(managed_instagram_account))
+        self.assertEqual(post_response.status_code, 400)
+
+    def test_create_managed_instagram_account_with_existing_should_400(self):
+        self.insert_example_user()
+
+        post_response = self.client.post(
+            '/api/v1/managed_instagram_accounts/',
+            headers=self.example_user_auth_headers(),
+            data=json.dumps(self.sample_managed_instagram_account_request))
+        self.assertEqual(post_response.status_code, 201)
+
+        post_response = self.client.post(
+            '/api/v1/managed_instagram_accounts/',
+            headers=self.example_user_auth_headers(),
+            data=json.dumps(self.sample_managed_instagram_account_request))
+        self.assertEqual(post_response.status_code, 400)
+
+    def test_get_managed_instagram_accounts(self):
+        self.insert_example_user()
+
+        post_response = self.client.post(
+            '/api/v1/managed_instagram_accounts/',
+            headers=self.example_user_auth_headers(),
+            data=json.dumps(self.sample_managed_instagram_account_request))
+        self.assertEqual(post_response.status_code, 201)
+
+        second_post = self.sample_managed_instagram_account_request.copy()
+        second_post['handle'] = 'new_rock_star'
+        post_response = self.client.post(
+            '/api/v1/managed_instagram_accounts/',
+            headers=self.example_user_auth_headers(),
+            data=json.dumps(second_post))
+        self.assertEqual(post_response.status_code, 201)
+
+        get_response = self.client.get(
+            '/api/v1/managed_instagram_accounts/',
+            headers=self.example_user_auth_headers())
+        self.assertEqual(get_response.status_code, 200)
+        self.assertEqual(len(get_response.json['managed_instagram_accounts']), 2)
