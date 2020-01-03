@@ -29,6 +29,8 @@ def post(id: int):
     form.managed_instagram_accounts.choices = [(mia.id, mia.handle) for mia in managed_instagram_accounts]
 
     if form.validate_on_submit():
+        post.caption = form.caption.data
+        post.alt_text = form.alt_text.data
         selected_accounts = form.managed_instagram_accounts.data
         form.managed_instagram_accounts.data = []
         post.managed_instagram_accounts = list(filter(
@@ -40,8 +42,6 @@ def post(id: int):
         return redirect(url_for('.post', id=post.id))
 
     # Additional form setup
-    if not post.caption:
-        form.caption.data = post.influencer_caption
     form.managed_instagram_accounts.data = [mia.id for mia in post.managed_instagram_accounts]
     return render_template('post.html', post=post, form=form)
 

@@ -6,7 +6,7 @@ from wtforms_components import read_only
 
 class EditPostForm(FlaskForm):
     influencer_caption = StringField('Influencer caption:', validators=[DataRequired()])
-    caption = StringField('Caption:', validators=[DataRequired()])
+    caption = StringField('Caption:')
     alt_text = StringField('Alt Text:')
     influencer = StringField('Influencer:', validators=[DataRequired()])
     managed_instagram_accounts = SelectMultipleField('Managed Instagram Accounts: ', coerce=int)
