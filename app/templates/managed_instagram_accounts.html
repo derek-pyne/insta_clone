@@ -6,13 +6,19 @@
 
 {% block page_content %}
     <div class="page-header">
-        <h1>Managed Instagram Account</h1>
+        <h1>Managed Instagram Accounts</h1>
     </div>
+    <ul class="managed-instagram-accounts">
+        {% for account in managed_instagram_accounts %}
+            <li class="editable-post">
+                {{ macros.managed_instagram_account_preview(account) }}
+            </li>
+        {% endfor %}
+    </ul>
+    <h2>Create new account</h2>
     <div>
         {{ wtf.quick_form(form) }}
     </div>
-    <h2>Reposts</h2>
-    {% include '_posts.html' %}
 {% endblock %}
 
 {% block scripts %}

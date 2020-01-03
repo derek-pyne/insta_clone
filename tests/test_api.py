@@ -113,10 +113,11 @@ class APITestCase(unittest.TestCase):
             headers=self.example_user_auth_headers(),
             data=json.dumps(self.sample_post_request))
         self.assertEqual(post_response.status_code, 201)
+
+        keys_to_ignore = ['id', 'caption', 'created_at', 'updated_at', 'managed_instagram_accounts']
         self.assertDictEqual(
-            {k: v for k, v in post_response.json.items() if k not in ['id', 'caption', 'created_at', 'updated_at']},
-            {k: v for k, v in self.sample_post_request.items() if
-             k not in ['id', 'caption', 'created_at', 'updated_at']}
+            {k: v for k, v in post_response.json.items() if k not in keys_to_ignore},
+            {k: v for k, v in self.sample_post_request.items() if k not in keys_to_ignore}
         )
 
         get_response = self.client.get(

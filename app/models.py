@@ -19,9 +19,6 @@ class User(AuditableMixin, UserMixin, db.Model):
     password_hash = db.Column(db.String())
     confirmed = db.Column(db.Boolean, default=False)
 
-    def __init__(self, **kwargs):
-        super(User, self).__init__(**kwargs)
-
     @property
     def password(self):
         raise AttributeError('password is not a readable attribute')
@@ -110,6 +107,7 @@ class User(AuditableMixin, UserMixin, db.Model):
 class UserSchema(ma.ModelSchema):
     class Meta:
         model = User
+        dump_only = ['id', 'created_at', 'updated_at']
 
 
 @login_manager.user_loader
@@ -138,14 +136,6 @@ class Post(AuditableMixin, db.Model):
 
     caption = db.Column(db.String())
 
-    def __init__(self, instagram_post_hash: str, influencer: str, img_file: str, influencer_caption: str,
-                 alt_text: str) -> None:
-        self.instagram_post_hash = instagram_post_hash
-        self.influencer = influencer
-        self.influencer_caption = influencer_caption
-        self.img_file = img_file
-        self.alt_text = alt_text
-
     def __repr__(self) -> str:
         return '<id {}>'.format(self.id)
 
@@ -153,6 +143,7 @@ class Post(AuditableMixin, db.Model):
 class PostSchema(ma.ModelSchema):
     class Meta:
         model = Post
+        dump_only = ['id', 'created_at', 'updated_at']
 
     managed_instagram_accounts = ma.List(ma.Nested('ManagedInstagramAccountSchema', exclude=('posts',)))
 
@@ -167,9 +158,6 @@ class ManagedInstagramAccount(AuditableMixin, db.Model):
                             backref=db.backref('managed_instagram_accounts', lazy='dynamic'),
                             lazy='dynamic')
 
-    def __init__(self, handle: str) -> None:
-        self.handle = handle
-
     def __repr__(self) -> str:
         return '<id {}, handle {}>'.format(self.id, self.handle)
 
@@ -177,5 +165,6 @@ class ManagedInstagramAccount(AuditableMixin, db.Model):
 class ManagedInstagramAccountSchema(ma.ModelSchema):
     class Meta:
         model = ManagedInstagramAccount
+        dump_only = ['id', 'created_at', 'updated_at']
 
     posts = ma.List(ma.Nested(PostSchema, exclude=('managed_instagram_accounts',)))
